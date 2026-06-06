@@ -1,0 +1,128 @@
+.home-page {
+  width: min(100% - 48px, 960px);
+  margin: 0 auto;
+  padding-top: 56px;
+}
+
+.home-title {
+  max-width: 760px;
+  margin-bottom: 16px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: transparent;
+  background: linear-gradient(90deg, #1677ff 0%, #11a97d 48%, #ff7a45 100%);
+  background-clip: text;
+}
+
+.home-description {
+  max-width: 620px;
+  color: #3b4657;
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.invite-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 640px);
+  margin-top: 24px;
+}
+
+.invite-link .ant-input {
+  flex: 1;
+}
+
+.invite-link-error {
+  margin-top: 8px;
+  color: #cf2929;
+  font-size: 14px;
+}
+
+.home-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.home-action {
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
+  padding: 22px;
+  border: 1px solid #d7dee9;
+  border-radius: 8px;
+  background-image:
+    linear-gradient(180deg, rgba(8, 12, 20, 0.12), rgba(8, 12, 20, 0.68)),
+    url('../../assets/room-background-blocks.png');
+  background-repeat: no-repeat;
+  background-size:
+    cover,
+    190% auto;
+  box-shadow: 0 12px 30px rgba(27, 39, 58, 0.08);
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s,
+    transform 0.2s;
+}
+
+.home-action-create {
+  background-position:
+    center,
+    left center;
+}
+
+.home-action-list {
+  background-position:
+    center,
+    right center;
+}
+
+.home-action:hover {
+  border-color: #64d2ff;
+  box-shadow:
+    0 18px 44px rgba(22, 119, 255, 0.24),
+    0 0 0 3px rgba(100, 210, 255, 0.28);
+  filter: saturate(1.08) brightness(1.06);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.home-action-title {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 300px;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.home-action-text {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 330px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.38);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+@media (max-width: 640px) {
+  .invite-link {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-actions {
+    grid-template-columns: 1fr;
+  }
+}
