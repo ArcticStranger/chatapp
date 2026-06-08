@@ -4,7 +4,8 @@ import './RoomPage.css';
 import Modal from './modal.tsx';
 import { Input } from 'antd';
 import type { InputNumberProps } from 'antd';
-import { Flex, InputNumber } from 'antd';
+import { Flex, InputNumber, Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 const onChange: InputNumberProps['onChange'] = (value) => {
   console.log('changed', value);
@@ -37,6 +38,23 @@ export function RoomPage() {
       <h2>Макс. кол-во участников:</h2>
       <Flex vertical gap="medium">
         <InputNumber {...sharedProps} placeholder="Outlined" />
+      </Flex>
+      <br />
+      <Flex gap="medium" wrap>
+        <nav>
+          <Link to="/home">
+            <Button type="primary" className="btn-room-init">
+              Создать
+            </Button>
+          </Link>
+        </nav>
+        <nav>
+          <Link to="/home">
+            <Button type="primary" className="btn-room-init" style={{ backgroundColor: 'red' }}>
+              Отменить
+            </Button>
+          </Link>
+        </nav>
       </Flex>
     </>
     // </Draggable>
