@@ -5,7 +5,8 @@ import Modal from './modal.tsx';
 import { Input } from 'antd';
 import type { InputNumberProps } from 'antd';
 import { Flex, InputNumber, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { nanoid } from 'nanoid';
 
 const onChange: InputNumberProps['onChange'] = (value) => {
   console.log('changed', value);
@@ -21,6 +22,12 @@ const sharedProps = {
 };
 export function RoomPage() {
   // const nodeRef = useRef(null);
+  const navigate = useNavigate();
+  const handleCreateRoom = () => {
+    const id = nanoid(10);
+    navigate(`/room/${id}`);
+  };
+  //
   const [isOpen, setIsOpen] = useState(false);
   console.log(isOpen);
   return (
@@ -43,7 +50,7 @@ export function RoomPage() {
       <Flex gap="medium" wrap>
         <nav>
           <Link to="/home">
-            <Button type="primary" className="btn-room-init">
+            <Button type="primary" className="btn-room-init" onClick={handleCreateRoom}>
               Создать
             </Button>
           </Link>
