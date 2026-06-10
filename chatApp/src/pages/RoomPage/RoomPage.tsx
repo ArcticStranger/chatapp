@@ -49,11 +49,9 @@ export function RoomPage() {
       <br />
       <Flex gap="medium" wrap>
         <nav>
-          <Link to="/home">
-            <Button type="primary" className="btn-room-init" onClick={handleCreateRoom}>
-              Создать
-            </Button>
-          </Link>
+          <Button type="primary" className="btn-room-init" onClick={handleCreateRoom}>
+            Создать
+          </Button>
         </nav>
         <nav>
           <Link to="/home">

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import './Room.css';
 interface MessageData {
   roomId: string | undefined;
   text: string;
@@ -51,8 +52,7 @@ export function Room() {
   return (
     <div>
       <h3>
-        Ссылка для приглашения:{' '}
-        <code style={{ background: '#eee', padding: '4px' }}>{window.location.href}</code>
+        Ссылка для приглашения: <code className="link-window">{window.location.href}</code>
       </h3>
       <div
         className="chat-box"
