@@ -54,10 +54,7 @@ export function Room() {
       <h3>
         Ссылка для приглашения: <code className="link-window">{window.location.href}</code>
       </h3>
-      <div
-        className="chat-box"
-        style={{ border: '1px solid ccc', height: '300px', overflowY: 'scroll' }}
-      >
+      <div className="chat-box">
         {messages.map((msg, index) => (
           <p key={index}>
             <b>{msg.sender === socket.id ? 'Вы' : 'Гость'}:</b> {msg.text}
