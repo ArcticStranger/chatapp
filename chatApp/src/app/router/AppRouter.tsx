@@ -2,7 +2,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 
 import { HomePage } from '@/pages/HomePage';
 import { RoomPage } from '@/pages/RoomPage';
-import { RoomSessionPage } from '@/pages/room-session';
+import { RoomSessionPage } from '@/pages/RoomSession';
 
 export function AppRouter() {
   return (
