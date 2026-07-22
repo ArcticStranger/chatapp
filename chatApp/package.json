@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:server": "tsx src/server/server.ts",
+    "start": "tsx src/server/server.ts",
     "build": "tsc -b && vite build",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
