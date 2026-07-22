@@ -4,7 +4,7 @@ import { Input } from 'antd';
 import { Flex, InputNumber, Button } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
-import { socket } from '@/shared/api/socket';
+import { useAppDispatch } from '@/app/store/hooks';
 
 const sharedProps = {
   mode: 'spinner' as const,
@@ -16,26 +16,21 @@ const sharedProps = {
 
 export function RoomPage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [roomName, setRoomName] = useState('');
   const [maxParticipants, setMaxParticipants] = useState(2);
 
   const handleCreateRoom = () => {
     const id = nanoid(10);
 
-    socket.connect();
-    socket.emit(
-      'create-room',
-      {
+    dispatch({
+      type: 'chat/createRoom',
+      payload: {
         roomId: id,
         roomName: roomName.trim() || `Room ${id}`,
         maxParticipants,
       },
-      (response: { ok: boolean; error?: string }) => {
-        if (response.error) {
-          console.error('Failed to create room:', response.error);
-        }
-      },
-    );
+    });
 
     navigate(`/room/${id}`);
   };

@@ -52,6 +52,7 @@ io.on('connection', (socket: Socket) => {
       id: data.roomId,
       name: data.roomName,
       max_participants: data.maxParticipants,
+      host_id: socket.id,
     });
 
     if (error) {
@@ -74,6 +75,7 @@ io.on('connection', (socket: Socket) => {
 
     if (messagesError) {
       console.error(messagesError);
+      socket.emit('room-joined', { error: messagesError.message });
       return;
     }
 
@@ -85,6 +87,8 @@ io.on('connection', (socket: Socket) => {
 
     if (sessionError) {
       console.error(sessionError);
+      socket.emit('room-joined', { error: sessionError.message });
+      return;
     }
 
     socket.emit('room-joined', { messages, session });
@@ -99,6 +103,7 @@ io.on('connection', (socket: Socket) => {
 
     if (error) {
       console.error('Supabase error:', error);
+      socket.emit('sessions-list', { error: error.message });
       return;
     }
 
@@ -121,7 +126,7 @@ io.on('connection', (socket: Socket) => {
     }
 
     console.log(insertedData);
-    socket.to(data.roomId).emit('receive-message', data);
+    io.to(data.roomId).emit('receive-message', data);
   });
 
   socket.on('disconnect', () => {

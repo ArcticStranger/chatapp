@@ -5,13 +5,19 @@ import { MessageBubble } from './MessageBubble';
 
 interface MessageListProps {
   messages: Message[];
+  hostId: string | null;
 }
 
-export function MessageList({ messages }: MessageListProps) {
+export function MessageList({ messages, hostId }: MessageListProps) {
   return (
     <div className="chat-box">
       {messages.map((message) => (
-        <MessageBubble key={message.id} text={message.text} isOwn={message.sender === socket.id} />
+        <MessageBubble
+          key={message.id}
+          text={message.text}
+          isOwn={message.sender === socket.id}
+          isHost={message.sender === hostId}
+        />
       ))}
     </div>
   );
