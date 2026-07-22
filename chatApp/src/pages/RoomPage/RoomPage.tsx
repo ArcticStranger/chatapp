@@ -23,12 +23,19 @@ export function RoomPage() {
     const id = nanoid(10);
 
     socket.connect();
-    socket.emit('create-room', {
-      roomId: id,
-      roomName: roomName.trim() || `Room ${id}`,
-      maxParticipants,
-    });
-    socket.disconnect();
+    socket.emit(
+      'create-room',
+      {
+        roomId: id,
+        roomName: roomName.trim() || `Room ${id}`,
+        maxParticipants,
+      },
+      (response: { ok: boolean; error?: string }) => {
+        if (response.error) {
+          console.error('Failed to create room:', response.error);
+        }
+      },
+    );
 
     navigate(`/room/${id}`);
   };

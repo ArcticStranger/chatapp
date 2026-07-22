@@ -37,19 +37,21 @@ const io = new Server(server, {
 io.on('connection', (socket: Socket) => {
   console.log(`Пользователь подключился: ${socket.id}`);
 
-  socket.on('create-room', async (data: CreateRoomData) => {
+  socket.on('create-room', async (data: CreateRoomData, callback) => {
     const { error } = await supabase.from('sessions').insert({
-      room_id: data.roomId,
-      room_name: data.roomName,
+      id: data.roomId,
+      name: data.roomName,
       max_participants: data.maxParticipants,
     });
 
     if (error) {
       console.error('Supabase error:', error);
+      callback?.({ ok: false, error: error.message });
       return;
     }
 
     console.log(`Комната создана: ${data.roomId}`);
+    callback?.({ ok: true });
   });
 
   socket.on('join-room', async (roomId: string) => {
@@ -68,7 +70,7 @@ io.on('connection', (socket: Socket) => {
     const { data: session, error: sessionError } = await supabase
       .from('sessions')
       .select()
-      .eq('room_id', roomId)
+      .eq('id', roomId)
       .single();
 
     if (sessionError) {

@@ -66,11 +66,11 @@ export function HomePage() {
             <ul className="session-list-items">
               {model.sessions.map((session) => (
                 <li
-                  key={session.room_id}
+                  key={session.id}
                   className="session-list-item"
-                  onClick={() => model.handleSessionClick(session.room_id)}
+                  onClick={() => model.handleSessionClick(session.id)}
                 >
-                  <span className="session-list-item-name">{session.room_name}</span>
+                  <span className="session-list-item-name">{session.name}</span>
                   <span className="session-list-item-meta">
                     Участников: {session.max_participants} &middot;{' '}
                     {new Date(session.created_at).toLocaleString()}
