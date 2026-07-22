@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors';
+import path from 'path';
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
 
@@ -24,6 +25,12 @@ interface CreateRoomData {
 
 const app = express();
 app.use(cors());
+
+app.use(express.static(path.join(process.cwd(), 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+});
 
 const server = createServer(app);
 
@@ -119,4 +126,5 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
-server.listen(5000, () => console.log('Сервер успешно запущен на порту 5000'));
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
