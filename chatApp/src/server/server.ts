@@ -134,4 +134,5 @@ io.on('connection', (socket: Socket) => {
 });
 
 const PORT = process.env.PORT || 5000;
+console.log('PORT env:', process.env.PORT, 'using:', PORT);
 server.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
