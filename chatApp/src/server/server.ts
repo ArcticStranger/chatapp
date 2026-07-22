@@ -5,13 +5,21 @@ import cors from 'cors';
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
 
+console.log(process.env.SUPABASE_URL);
+console.log(process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 10));
+
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-// 1. Описываем интерфейс сообщения
 interface MessageData {
   roomId: string;
   text: string;
   sender: string;
+}
+
+interface CreateRoomData {
+  roomId: string;
+  roomName: string;
+  maxParticipants: number;
 }
 
 const app = express();
@@ -19,7 +27,6 @@ app.use(cors());
 
 const server = createServer(app);
 
-// 2. Настраиваем CORS для подключения вашего React-приложения (порт 5173)
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
@@ -27,36 +34,82 @@ const io = new Server(server, {
   },
 });
 
-// 3. Вместо any используем встроенный тип Socket из socket.io
 io.on('connection', (socket: Socket) => {
   console.log(`Пользователь подключился: ${socket.id}`);
 
-  // Юзер сообщает, в какую комнату хочет войти
+  socket.on('create-room', async (data: CreateRoomData) => {
+    const { error } = await supabase.from('sessions').insert({
+      room_id: data.roomId,
+      room_name: data.roomName,
+      max_participants: data.maxParticipants,
+    });
+
+    if (error) {
+      console.error('Supabase error:', error);
+      return;
+    }
+
+    console.log(`Комната создана: ${data.roomId}`);
+  });
+
   socket.on('join-room', async (roomId: string) => {
     socket.join(roomId);
 
-    const { data, error } = await supabase.from('messages').select();
-    if (error) {
-      console.error(error);
+    const { data: messages, error: messagesError } = await supabase
+      .from('messages')
+      .select()
+      .eq('room_id', roomId);
+
+    if (messagesError) {
+      console.error(messagesError);
       return;
     }
 
-    console.log(data);
+    const { data: session, error: sessionError } = await supabase
+      .from('sessions')
+      .select()
+      .eq('room_id', roomId)
+      .single();
+
+    if (sessionError) {
+      console.error(sessionError);
+    }
+
+    socket.emit('room-joined', { messages, session });
     console.log(`Пользователь ${socket.id} вошел в комнату: ${roomId}`);
   });
 
-  // Пересылка сообщений между участниками конкретной комнаты
-  socket.on('send-message', async (data: MessageData) => {
-    // Отправляем сообщение всем в комнате, кроме самого отправителя
+  socket.on('get-sessions', async () => {
+    const { data, error } = await supabase
+      .from('sessions')
+      .select()
+      .order('created_at', { ascending: false });
 
-    const { error } = await supabase
-      .from('messages')
-      .insert({ room_id: data.roomId, text: data.text, sender: data.sender });
-    socket.to(data.roomId).emit('receive-message', data);
     if (error) {
-      console.log(error);
+      console.error('Supabase error:', error);
       return;
     }
+
+    socket.emit('sessions-list', data);
+  });
+
+  socket.on('send-message', async (data: MessageData) => {
+    const { data: insertedData, error } = await supabase
+      .from('messages')
+      .insert({
+        room_id: data.roomId,
+        text: data.text,
+        sender: data.sender,
+      })
+      .select();
+
+    if (error) {
+      console.error('Supabase error:', error);
+      return;
+    }
+
+    console.log(insertedData);
+    socket.to(data.roomId).emit('receive-message', data);
   });
 
   socket.on('disconnect', () => {
@@ -64,5 +117,4 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
-// 4. Сервер слушает порт 5000
 server.listen(5000, () => console.log('Сервер успешно запущен на порту 5000'));

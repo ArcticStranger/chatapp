@@ -1,11 +1,12 @@
 import { Button, Input } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { CopyOutlined, EnterOutlined } from '@ant-design/icons';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import useHomePage from '../model/useHomePage';
 
 export function HomePage() {
   const model = useHomePage();
+
   return (
     <main className="home-page">
       <h1 className="home-title">Мессенджер здорового курильщика</h1>
@@ -25,6 +26,12 @@ export function HomePage() {
         <Button icon={<CopyOutlined />} onClick={model.handlePasteLink} size="large" type="primary">
           Вставить
         </Button>
+
+        {model.inviteLink && (
+          <Button icon={<EnterOutlined />} onClick={model.handleJoinLink} size="large">
+            Войти
+          </Button>
+        )}
       </div>
 
       {model.pasteError && <p className="invite-link-error">{model.pasteError}</p>}
@@ -39,14 +46,41 @@ export function HomePage() {
         <button
           className="home-action home-action-list"
           type="button"
-          onClick={() => console.log('room list clicked')}
+          onClick={model.toggleSessions}
         >
           <span className="home-action-title">Открыть список чатов</span>
           <span className="home-action-text">
-            Вернитесь к уже созданным комнатам и продолжите переписку.
+            {model.sessionsOpen
+              ? 'Скрыть список комнат'
+              : 'Вернитесь к уже созданным комнатам и продолжите переписку.'}
           </span>
         </button>
       </section>
+
+      {model.sessionsOpen && (
+        <section className="session-list">
+          <h2>Список комнат</h2>
+          {model.sessions.length === 0 ? (
+            <p className="session-list-empty">Нет созданных комнат</p>
+          ) : (
+            <ul className="session-list-items">
+              {model.sessions.map((session) => (
+                <li
+                  key={session.room_id}
+                  className="session-list-item"
+                  onClick={() => model.handleSessionClick(session.room_id)}
+                >
+                  <span className="session-list-item-name">{session.room_name}</span>
+                  <span className="session-list-item-meta">
+                    Участников: {session.max_participants} &middot;{' '}
+                    {new Date(session.created_at).toLocaleString()}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
     </main>
   );
 }

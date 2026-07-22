@@ -2,6 +2,17 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "editor.inlineSuggest.enabled": false,
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.parameterHints.enabled": false,
+  "github.copilot.chat.agent.autoFix": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
