@@ -26,19 +26,14 @@ interface CreateRoomData {
 const app = express();
 app.use(cors());
 
+app.get('/', (_req, res) => {
+  res.send('App is running');
+});
+
 const distPath = path.join(process.cwd(), 'dist');
 console.log('Serving static from:', distPath);
 
 app.use(express.static(distPath));
-
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'), (err) => {
-    if (err) {
-      console.error('Error sending index.html:', err);
-      res.status(500).send('Static files not found at ' + distPath);
-    }
-  });
-});
 
 app.use((_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
