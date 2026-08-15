@@ -1,12 +1,56 @@
-.room-elem {
-  width: 50%;
-  display: flex;
-  padding: 40px;
-  box-sizing: border-box;
+.room-page {
+  width: min(100% - 48px, 640px);
+  margin: 0 auto;
+  padding-top: 48px;
 }
 
-/* modal shit*/
+.room-page-title {
+  margin-bottom: 24px;
+  color: #111827;
+}
 
+.room-page-label {
+  display: block;
+  margin: 0 0 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.room-page-actions {
+  margin-top: 28px;
+}
+
+.input-name-room {
+  color: #111827;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+.btn-room-init {
+  min-width: 160px;
+  height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn-room-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  color: #6366f1;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.btn-room-link:hover {
+  opacity: 0.75;
+}
+
+/* modal */
 .modal {
   position: fixed;
   inset: 0;
@@ -71,18 +115,4 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-.input-name-room {
-  color: black;
-  width: 40%;
-  height: 4vh;
-}
-
-.btn-room-init {
-  display: grid;
-  width: 100%;
-  height: 5vh;
-  font-size: 1.2rem;
-  font-weight: 600;
 }

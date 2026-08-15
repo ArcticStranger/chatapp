@@ -1,4 +1,3 @@
-// import Draggable from 'react-draggable';
 import { useState } from 'react';
 import './RoomPage.css';
 import Modal from './modal.tsx';
@@ -8,60 +7,54 @@ import { Flex, InputNumber, Button } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
-const onChange: InputNumberProps['onChange'] = (value) => {
-  console.log('changed', value);
-};
-
-const sharedProps = {
-  mode: 'spinner' as const,
+const sharedProps: InputNumberProps = {
+  mode: 'spinner',
   min: 2,
   max: 4,
   defaultValue: 2,
-  onChange,
-  style: { width: '40%', height: '4vh', fontSize: '1.5rem' },
+  style: { width: '100%' },
 };
+
 export function RoomPage() {
-  // const nodeRef = useRef(null);
   const navigate = useNavigate();
   const handleCreateRoom = () => {
     const id = nanoid(10);
     navigate(`/room/${id}`);
   };
-  //
+
   const [isOpen, setIsOpen] = useState(false);
-  console.log(isOpen);
+
   return (
-    // <Draggable nodeRef={nodeRef}>
-    <>
-      <button className="room-elem" onClick={() => setIsOpen(true)}>
-        Drag me
-      </button>
+    <main className="room-page">
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <p>some text of modal</p>
+        <p>Вы уверены, что хотите отменить создание комнаты?</p>
       </Modal>
-      <h2>Создайте название комнаты:</h2>
-      <Input placeholder="test" className="input-name-room" />
-      <br />
-      <h2>Макс. кол-во участников:</h2>
-      <Flex vertical gap="medium">
-        <InputNumber {...sharedProps} placeholder="Outlined" />
+
+      <h2 className="room-page-title">Создание комнаты</h2>
+
+      <label className="room-page-label" htmlFor="room-name">
+        Название комнаты
+      </label>
+      <Input id="room-name" placeholder="Введите название комнаты" className="input-name-room" />
+
+      <label className="room-page-label" htmlFor="room-members">
+        Макс. количество участников
+      </label>
+      <Flex vertical gap="medium" style={{ maxWidth: 320 }}>
+        <InputNumber id="room-members" {...sharedProps} placeholder="2" />
       </Flex>
-      <br />
-      <Flex gap="medium" wrap>
-        <nav>
-          <Button type="primary" className="btn-room-init" onClick={handleCreateRoom}>
-            Создать
-          </Button>
-        </nav>
-        <nav>
-          <Link to="/home">
-            <Button type="primary" className="btn-room-init" style={{ backgroundColor: 'red' }}>
-              Отменить
-            </Button>
-          </Link>
-        </nav>
+
+      <Flex gap="medium" wrap className="room-page-actions">
+        <Button type="primary" className="btn-room-init" onClick={handleCreateRoom}>
+          Создать
+        </Button>
+        <Button type="default" className="btn-room-init" onClick={() => setIsOpen(true)}>
+          Отменить
+        </Button>
+        <Link to="/home" className="btn-room-link">
+          На главную
+        </Link>
       </Flex>
-    </>
-    // </Draggable>
+    </main>
   );
 }
